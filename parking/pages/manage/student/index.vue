@@ -5,7 +5,6 @@
       :headers="headers"
       :items="std"
       :search="search"
-      :pagination.sync="pagination"
       hide-actions
       class="elevation-1"
       
@@ -22,8 +21,8 @@
     </template>
     <template slot="items" slot-scope="props" >
       <tr v-on:click="list_student(props.item.std_id)">
-        <td class="text-xs-left">{{ props.item.std_id }}</td>
         <td class="text-xs-left">{{ props.item.std_code }}</td>
+        <td class="text-xs-left">{{ props.item.std_pin_id }}</td>
         <td class="text-xs-left">{{ props.item.std_prename }}{{ props.item.std_name }} {{ props.item.std_lname }}</td>
         <td class="text-xs-center">{{ props.item.std_gender }}</td>
       
@@ -54,12 +53,12 @@
           { text: 'วันเกิด', value: 'วันเกิด',align: 'center',sortable: false,  },
           { text: 'กลุ่ม', value: 'กลุ่ม',align: 'center',sortable: false,  },
         ],
-        std: []
+        std:[]
       }
     },
     async created(){
      let res=await this.$http.get('/student/list')
-     //console.log(res.data.student)
+    //  console.log(res.data.student)
      this.std=res.data.student
       
     },
