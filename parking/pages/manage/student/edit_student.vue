@@ -79,7 +79,7 @@
             <v-flex xs6>
               <v-select
                 :items="bld"
-                v-model="blood"
+                v-model="std_blood"
                 menu-props="auto"
                 hide-details
                 label="กรุ๊ปเลือด"
@@ -110,9 +110,9 @@
             std_name:"",
             std_lname:"",
             std_birthday:"",
-            blood: '',
+            std_blood: '',
             std_gender:'',
-
+          
             bld:['A', 'B', 'O','AB'],
             gd:['ชาย','หญิง'],
             item_std_prename:['นาย','นางสาว','นาง',],
@@ -131,7 +131,7 @@
           this.std_lname=res.data.student.std_lname
           this.std_birthday=res.data.student.std_birthday
           this.std_gender=res.data.student.std_gender
-          this.std_code=res.data.student.std_code
+          this.std_blood=res.data.student.std_blood
         },
     }
 </script>

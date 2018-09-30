@@ -5,7 +5,6 @@ module.exports = router
 
 router.get('/list', async (req, res) => {
   try {
-    // let rows = await req.db.raw('SELECT * FROM 	pk_student')
     let rows = await req.db('pk_student').select('*')
     res.send({
       ok: true,
@@ -16,16 +15,6 @@ router.get('/list', async (req, res) => {
   }
 })
 
-// /api/std/id/555
-router.get('/id/:id', async (req, res) => {
-  let db = req.db
-  let rows = await db('student')
-    .where('id', '=', req.params.id)
-  res.send({
-    ok: true,
-    student: rows[0] || {},
-  })
-})
 router.get("/sh_std/:std_id",async(req,res)=>{
   console.log('param='+req.params.std_id)
   try{
@@ -61,6 +50,24 @@ router.post('/save', async (req, res) => {
   } catch (e) {
     res.send({ ok: false, error: e.message })
   }
+})
+router.post("/std_add",async (req,res)=>{
+  try{
+    let std_id=await req.db("pk_student").insert({
+      	std_code:req.body.std_code,
+        std_gender:req.body.std_gender,
+        std_prename:req.body.std_prename,
+        std_name:req.body.std_name,
+        std_lname:req.body.std_lname,
+        std_pin_id:req.body.std_pin_id,
+        std_birthday:req.body.std_birthday,
+      	std_blood:req.body.std_blood,
+      	g_code:req.body.g_code,
+      	std_username:req.body.std_code,
+      	std_password:req.body.std_pin_id
+    })
+    res.send({ok:true,txt:"เพิ่มข้อมูล "+req.body.std_code+" สำเร็จ",alt:"success"})
+  }catch(e){res.send({ok:false,txt:"ไม่สามารถเพิ่มข้อมูลได้",alt:"error"})}
 })
 
 
