@@ -1,3 +1,3 @@
-db=databases
-my-api=knex=>mysql
-parking=app
+Now
+
+localhost:3000/manage/student
