@@ -91,6 +91,49 @@
              'IT C1'
             ]
           }
-        }
+        },
+        async created(){
+          this.sh_teacher()
+        },
+        conf_del(){this.conf_del=true},
+            async std_del(){
+              let res=await this.$http.get('/student/std_del/'+this.$route.query.std_id)
+              if(res.data.ok==true){this.$router.replace('../../manage/student')}
+              else{this.danger=true,this.alt_txt=res.data.txt,this.type_api=res.data.alt}
+            },
+            async sh_teacher(){
+              let res=await this.$http.get('/student/sh_teacher/'+this.$route.query.std_id)
+              this.std_id=this.$route.query.std_id
+              this.std=res.data.student
+              this.std_code=res.data.student.std_code
+              this.std_pin_id=res.data.student.std_pin_id
+              this.std_prename=res.data.student.std_prename
+              this.std_name=res.data.student.std_name
+              this.std_lname=res.data.student.std_lname
+              this.std_birthday=res.data.student.std_birthday
+              this.std_gender=res.data.student.std_gender
+              this.std_blood=res.data.student.std_blood
+              this.g_code=res.data.student.g_code
+            },
+            async std_update(std_id){
+              //console.log("std_id"+std_id)
+              let res=await this.$http.post("/student/std_update",{
+                
+        				std_code:this.std_code,
+        				std_pin_id:this.std_pin_id,
+        				std_prename:this.std_prename,
+        				std_name:this.std_name,
+        				std_lname:this.std_lname,
+        				std_birthday:this.std_birthday,
+        				std_gender:this.std_gender,
+        				std_blood:this.std_blood,
+        				g_code:this.g_code,
+                std_id:std_id,
+
+              })
+              console.log(res.data)
+                if(res.data.ok==true){this.danger=true,this.alt_txt=res.data.txt,this.type_api=res.data.alt}
+            	 else{this.danger=true,this.alt_txt=res.data.txt,this.type_api=res.data.alt}
+            },
     }
 </script>
