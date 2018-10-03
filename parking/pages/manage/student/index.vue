@@ -21,11 +21,10 @@
     </template>
     <template slot="items" slot-scope="props" >
       <tr v-on:click="list_student(props.item.std_id)">
-        <td class="text-xs-left">{{ props.item.std_code }}</td>
+        <td class="text-xs-left xs10">{{ props.item.std_code }}</td>
         <td class="text-xs-left">{{ props.item.std_pin_id }}</td>
         <td class="text-xs-left">{{ props.item.std_prename }}{{ props.item.std_name }} {{ props.item.std_lname }}</td>
         <td class="text-xs-center">{{ props.item.std_gender }}</td>
-      
         <td class="text-xs-center">{{ props.item.std_birthday }}</td>
         <td class="text-xs-center">{{ props.item.g_code }}</td>
       </tr>
@@ -47,7 +46,7 @@
         selected: [],
         headers: [
           {text: 'รหัสนักศึกษา',align: 'left',sortable: false, value: 'name'},
-          { text: 'รหัสประจำตัว', value: 'รหัสประจำตัว',align: 'left' },
+          { text: 'รหัสประจำตัว', value: 'รหัสประจำตัว',align: 'left', sortable: false,},
           { text: 'ชื่อ', value: 'ชื่อ',align: 'center',sortable: false,  },
           { text: 'เพศ', value: 'เพศ',align: 'center',sortable: false,  },
           { text: 'วันเกิด', value: 'วันเกิด',align: 'center',sortable: false,  },
@@ -75,6 +74,7 @@
       list_student(std_id){
         this.$router.replace('../manage/student/edit_student?std_id='+std_id)
       },
+     
     }
   }
 </script>
