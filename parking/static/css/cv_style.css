@@ -20,4 +20,10 @@
 .icon_login{
     width:30%; 
 }
+.cv-danger{
+    color:#c52323;
+}
+.cv-clean{
+    color:#fff;
+}
 
