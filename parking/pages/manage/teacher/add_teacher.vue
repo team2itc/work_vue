@@ -49,7 +49,7 @@
                   v-model="t_dep"
                 ></v-text-field>
               </v-layout>
-            </v-flex><i class=""></i>
+            </v-flex>
             <v-flex xs12 >
               <v-layout align-center>
                 <v-text-field 
@@ -115,7 +115,7 @@
         </v-container>
         <v-card-actions>
           <v-spacer></v-spacer>
-          <v-btn flat color="red lighten-2" @click="teacher()">ยกเลิก</v-btn>
+          <v-btn flat color="red lighten-2" @click="teacher()">ย้อนกลับ</v-btn>
           <v-btn flat color="primary" @click="teaher_add()">บันทึก</v-btn>
         </v-card-actions>
     </v-card>
@@ -145,7 +145,7 @@
             group: ['a','b'],
             rules: {
               required: value => !!value || 'ห้ามว่าง.',
-              counter: value => value.length <= 20 || 'เต็ม 10 ตัวอักษร',
+              // counter: value => value.length <= 10 || 'เต็ม 10 ตัวอักษร',
             }
           
           }

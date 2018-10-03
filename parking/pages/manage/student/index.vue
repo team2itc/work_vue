@@ -6,6 +6,7 @@
       :items="std"
       :search="search"
       hide-actions
+      :loading=state
       class="elevation-1"
       
     >
@@ -29,6 +30,11 @@
         <td class="text-xs-center">{{ props.item.g_code }}</td>
       </tr>
     </template>
+      <template slot="no-data">
+        <v-alert :value="true" color="error" icon="warning">
+          ไม่พบข้อมูล :(
+        </v-alert>
+      </template>
   </v-data-table>
    <!-- <div class="text-xs-center pt-2">
       <v-pagination v-model="pagination.page" :length="pages"></v-pagination>
@@ -41,6 +47,7 @@
     layout: 'manage',
     data () {
       return {
+        state:true,
         search: '',
         pagination: {},
         selected: [],
@@ -56,9 +63,11 @@
       }
     },
     async created(){
-     let res=await this.$http.get('/student/list')
-    //  console.log(res.data.student)
-     this.std=res.data.student
+      // this.state=true
+      let res=await this.$http.get('/student/list')
+      //  console.log(res.data.student)
+      this.std=res.data.student
+      this.state=false
       
     },
     computed: {

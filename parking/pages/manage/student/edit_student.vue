@@ -170,7 +170,7 @@
             conf_del:false,
             isEditing:null,
             bld:['A', 'B', 'O','AB'],
-            gd:['ชาย','หญิง'],
+            gd:[{text:'ชาย',value:"ช"},{text:'หญิง',value:"ญ"}],
             item_std_prename:['นาย','นางสาว','นาง',],
 
           }

@@ -64,7 +64,7 @@ router.post("/teacher_update",async(req,res)=>{//console.log(req.body.t_id)
         t_dep:req.body.t_dep,
         t_tel:req.body.t_tel,
       	t_username:req.body.t_code,
-      	t_password:req.body.std_pin_id
+      	t_password:req.body.t_tel
     }).where({
       t_id:req.body.t_id
     })

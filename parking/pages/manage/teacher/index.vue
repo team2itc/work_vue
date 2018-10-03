@@ -6,6 +6,7 @@
       :items="teacher"
       :search="search"
       :pagination.sync="pagination"
+      :loading=state
       hide-actions
       class="elevation-1"
     >
@@ -39,6 +40,7 @@
     layout: 'manage',
     data () {
       return {
+        state:false,
         search: '',
         pagination: {},
         selected: [],
@@ -52,9 +54,11 @@
       }
     },
     async created(){
+      this.state=true
      let res=await this.$http.get('/teacher/list')
     //  console.log(res.data.teacher)
      this.teacher=res.data.teacher
+     this.state=false
     },
     computed: {
       pages () {
