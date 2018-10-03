@@ -81,7 +81,7 @@
                 ></v-text-field>
             </v-flex>
             
-            <v-flex xs6>
+            <!-- <v-flex xs6>
               <v-select
                 :items="gd"
                 v-model="std_gender"
@@ -91,7 +91,7 @@
                 prepend-icon="fas fa-transgender"
               
               ></v-select>
-            </v-flex>
+            </v-flex> -->
             <v-flex xs6>
               <v-select
                 :items="bld"
@@ -136,12 +136,17 @@
             danger:false,
             alt_txt:"",
             bld:['A', 'B', 'O','AB' ],
-            gd:['ชาย','หญิง'],
+            // gd:[{text:'ชาย',value:"ช"},{text:'หญิง',value:"ญ"}],
             item_pre_name:['นาย','นางสาว','นาง',],
 
           }
           
         
+        },
+        watch:{
+          std_prename(newValue){
+            if(newValue=="นาย"){this.std_gender="ช"}else{this.std_gender="ญ"}
+          },
         },
         methods:{
           async std_add(){
@@ -154,7 +159,12 @@
               std_pin_id:this.std_pin_id,
               std_birthday:this.std_birthday,
               std_blood:this.std_blood,
-              g_code:this.g_code
+              g_code:this.g_code,
+              rules: {
+                required: value => !!value || 'ห้ามว่าง.',
+                counter_10: value => value.length <= 10 || 'เต็ม 10 ตัวอักษร',
+                counter_13: value => value.length <= 10 || 'เต็ม 10 ตัวอักษร',
+              }
             })
             if(res.data.ok==true){this.danger=true,this.alt_txt=res.data.txt,this.type_api=res.data.alt}
             else{this.danger=true,this.alt_txt=res.data.txt,this.type_api=res.data.alt}

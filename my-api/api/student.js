@@ -5,7 +5,7 @@ module.exports = router
 
 router.get('/list', async (req, res) => {
   try {
-    let rows = await req.db('pk_student').select('*')
+    let rows = await req.db('pk_student').select('*').orderBy("std_code","desc")
     res.send({
       ok: true,
       student: rows,

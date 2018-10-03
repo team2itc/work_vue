@@ -1,16 +1,48 @@
 
 <template>
     <v-card>
+       <v-alert
+        v-model="danger"
+        dismissible
+        :type=type_api
+      >
+        {{alt_txt}}
+      </v-alert>
         <v-card-title
           class="grey lighten-4 py-4 title"
         >
           แก้ไขข้อมูลครู / บุคลากร
+          <v-spacer></v-spacer>
+          <v-btn
+            color="green lighten-2"
+            flat
+            @click="isEditing = !isEditing"
+          >
+            <i v-if="isEditing" class="fas fa-times fa-2x"></i>
+            <i v-else class="fas fa-edit fa-2x "></i>
+          </v-btn>
+          <v-dialog v-model="conf_del" persistent max-width="290">
+            <v-btn slot="activator" flat color="red lighten-2"><i class="fas fa-trash-alt fa-2x"></i></v-btn>
+            <v-card>
+              <v-card-title class="headline">ยืนยันการลบข้อมูล</v-card-title>
+              <v-card-text>ต้องการลบข้อมูลรหัส {{t_code}}<br> ใช่หรือไม่?</v-card-text>
+              <v-card-actions>
+                <v-spacer></v-spacer>
+                <v-btn color="red lighten-2" flat @click.native="conf_del = false">ไม่ใช่</v-btn>
+                <v-btn color="primary" flat @click="teacher_del()">ใช่</v-btn>
+              </v-card-actions>
+            </v-card>
+          </v-dialog>
         </v-card-title>
         <v-container grid-list-sm class="pa-4">
           <v-layout row wrap>
             <v-flex xs12 >
               <v-layout align-center>
                 <v-text-field
+                  :disabled="!isEditing"
+                  maxlength="10"
+                  counter
+                  :rules="[rules.required, rules.counter]"
                   prepend-icon="fas fa-id-card-alt fa-2x"
                   placeholder="รหัสประจำตัวครู / บุคลากร"
                   name="t_code"
@@ -21,6 +53,8 @@
             <v-flex xs12 >
               <v-layout align-center>
                 <v-text-field 
+                  :disabled="!isEditing"
+                  :rules="[rules.required]"
                   prepend-icon="fas fa-user fa-2x"
                   placeholder="ชื่อ นามสกุล"
                   name="t_name"
@@ -28,8 +62,35 @@
                 ></v-text-field>
               </v-layout>
             </v-flex>
+            <v-flex xs12 >
+              <v-layout align-center>
+                <v-text-field 
+                  :disabled="!isEditing"
+                  :rules="[rules.required]"
+                  prepend-icon="fas fa-archway fa-2x"
+                  placeholder="แผนกวิชา"
+                  name="t_dep"
+                  v-model="t_dep"
+                ></v-text-field>
+              </v-layout>
+            </v-flex>
+            <v-flex xs12 >
+              <v-layout align-center>
+                <v-text-field 
+                  :disabled="!isEditing"
+                  :rules="[rules.required, rules.counter]"
+                  maxlength="10"
+                  counter
+                  prepend-icon="fas fa-phone-square fa-2x"
+                  placeholder="เบอร์โทรศัพท์"
+                  name="t_tel"
+                  v-model="t_tel"
+                ></v-text-field>
+              </v-layout>
+            </v-flex>
             <v-flex xs4>
               <v-select
+                :disabled="!isEditing"
                 :items="gro1"
                 v-model="std_gro1"
                 menu-props="auto"
@@ -41,6 +102,7 @@
             </v-flex>
             <v-flex xs4>
               <v-select
+                :disabled="!isEditing"
                 :items="gro2"
                 v-model="std_gro2"
                 menu-props="auto"
@@ -52,6 +114,7 @@
             </v-flex>
             <v-flex xs4>
               <v-select
+                :disabled="!isEditing"
                 :items="gro3"
                 v-model="std_gro3"
                 menu-props="auto"
@@ -66,8 +129,8 @@
         </v-container>
         <v-card-actions>
           <v-spacer></v-spacer>
-          <v-btn flat color="red lighten-2" @click="">ยกเลิก</v-btn>
-          <v-btn flat color="primary" @click="">บันทึก</v-btn>
+          <v-btn flat color="red lighten-2" @click="teacher()">ย้อนกลับ</v-btn>
+          <v-btn flat color="primary" :disabled="!isEditing" @click="teacher_update(t_id)">บันทึก</v-btn>
         </v-card-actions>
     </v-card>
 </template>
@@ -76,11 +139,25 @@
         layout: 'manage',
         data () {
           return {
-            t_code:"7071001",
-            t_name:"คุณ ครู",
-            std_gro1: '',
-            std_gro2: '',
-            std_gro3: '',
+            t_id:'',
+            t_code:"",
+            t_name:"",
+            t_dep:"",
+            t_tel:"",
+            t_username:"",
+            t_password:"",
+
+            mst_1: '',
+            mst_2: '',
+            mst_3: '',
+
+            type_api:"",
+            danger:false,
+            loading: false,
+            conf_del:false,
+            isEditing:null,
+            alt_txt:"",
+
             gro1: [
               'IT A1'
             ],
@@ -89,51 +166,53 @@
             ],
             gro3: [
              'IT C1'
-            ]
+            ],
+            rules: {
+              required: value => !!value || 'ห้ามว่าง.',
+              // counter: value => value.length <= 10 || 'เต็ม 10 ตัวอักษร',
+            }
           }
         },
         async created(){
           this.sh_teacher()
         },
-        conf_del(){this.conf_del=true},
-            async std_del(){
-              let res=await this.$http.get('/student/std_del/'+this.$route.query.std_id)
-              if(res.data.ok==true){this.$router.replace('../../manage/student')}
+        methods:{
+            conf_del(){this.conf_del=true},
+            async teacher_del(){
+              let res=await this.$http.get('/teacher/teacher_del/'+this.$route.query.t_id)
+              if(res.data.ok==true){this.$router.replace('../../manage/teacher')}
               else{this.danger=true,this.alt_txt=res.data.txt,this.type_api=res.data.alt}
             },
             async sh_teacher(){
-              let res=await this.$http.get('/student/sh_teacher/'+this.$route.query.std_id)
-              this.std_id=this.$route.query.std_id
-              this.std=res.data.student
-              this.std_code=res.data.student.std_code
-              this.std_pin_id=res.data.student.std_pin_id
-              this.std_prename=res.data.student.std_prename
-              this.std_name=res.data.student.std_name
-              this.std_lname=res.data.student.std_lname
-              this.std_birthday=res.data.student.std_birthday
-              this.std_gender=res.data.student.std_gender
-              this.std_blood=res.data.student.std_blood
-              this.g_code=res.data.student.g_code
+              let res=await this.$http.get('/teacher/sh_teacher/'+this.$route.query.t_id)
+              this.t_id=this.$route.query.t_id
+              this.t_code=res.data.teacher.t_code
+              this.t_name=res.data.teacher.t_name
+              this.t_dep=res.data.teacher.t_dep
+              this.t_tel=res.data.teacher.t_tel
+              this.t_username=res.data.teacher.t_username
+              this.t_password=res.data.teacher.t_password
+            
             },
-            async std_update(std_id){
-              //console.log("std_id"+std_id)
-              let res=await this.$http.post("/student/std_update",{
+            async teacher_update(t_id){
+              //console.log("t_id"+t_id)
+              let res=await this.$http.post("/teacher/teacher_update",{
                 
-        				std_code:this.std_code,
-        				std_pin_id:this.std_pin_id,
-        				std_prename:this.std_prename,
-        				std_name:this.std_name,
-        				std_lname:this.std_lname,
-        				std_birthday:this.std_birthday,
-        				std_gender:this.std_gender,
-        				std_blood:this.std_blood,
-        				g_code:this.g_code,
-                std_id:std_id,
-
+        				t_code:this.t_code,
+        				t_name:this.t_name,
+        				t_dep:this.t_dep,
+        				t_tel:this.t_tel,
+        				t_username:this.t_username,
+        				t_password:this.t_password,
+                t_id:t_id,
               })
               console.log(res.data)
                 if(res.data.ok==true){this.danger=true,this.alt_txt=res.data.txt,this.type_api=res.data.alt}
             	 else{this.danger=true,this.alt_txt=res.data.txt,this.type_api=res.data.alt}
             },
+            teacher(){
+              this.$router.replace("../teacher")
+            }
+        }
     }
 </script>
