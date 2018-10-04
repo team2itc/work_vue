@@ -67,7 +67,7 @@
               <v-autocomplete
                 prepend-icon="fas fa-users"
                 :loading="loading"
-                :items="items"
+                :items="group"
                 :search-input.sync="sh_gro1"
                 v-model="mst_1"
                 cache-items
@@ -83,7 +83,7 @@
               <v-autocomplete
                 prepend-icon="fas fa-users"
                 :loading="loading"
-                :items="items"
+                :items="group"
                 :search-input.sync="sh_gro2"
                 v-model="mst_2"
                 cache-items
@@ -99,7 +99,7 @@
               <v-autocomplete
                 prepend-icon="fas fa-users"
                 :loading="loading"
-                :items="items"
+                :items="group"
                 :search-input.sync="sh_gro3"
                 v-model="mst_3"
                 cache-items
@@ -131,22 +131,22 @@
               t_dep:"",
               t_tel:"",
 
-            mst_1: [],
-            mst_2: '',
-            mst_3: '',
+              mst_1: '',
+              mst_2: '',
+              mst_3: '',
 
-            type_api:"",
-            danger:false,
-            loading: false,
-            items: [],
-            sh_gro1: null,
-            sh_gro2: null,
-            sh_gro3: null,
-            group: ['a','b'],
-            rules: {
-              required: value => !!value || 'ห้ามว่าง.',
-              // counter: value => value.length <= 10 || 'เต็ม 10 ตัวอักษร',
-            }
+              type_api:"",
+              danger:false,
+              loading: false,
+              items: [],
+              sh_gro1: null,
+              sh_gro2: null,
+              sh_gro3: null,
+              group: [],
+              rules: {
+                required: value => !!value || 'ห้ามว่าง.',
+                // counter: value => value.length <= 10 || 'เต็ม 10 ตัวอักษร',
+              }
           
           }
     
@@ -165,17 +165,17 @@
         async created(){
           let res=await this.$http.get('/group/cus_select/g_code')
           // console.log(res.data.group)
-          // this.group=res.data.group
+          this.group=res.data.group
       
         },
         methods: {
           querySelections (v) {
             this.loading = true
             setTimeout(() => {
-              this.items = this.group.filter(e => {
-                return (e || '').toLowerCase().indexOf((v || '').toLowerCase()) > -1
-              })
-              // return this.group.filter(e => e.class + '' === this.items)
+              // this.items = this.group.filter(e => {
+              //   return (e || '').toLowerCase().indexOf((v || '').toLowerCase()) > -1
+              // })
+              return this.group.filter(e => e.class + '' === this.sh_gro1)
               this.loading = false
             }, 500)
           },

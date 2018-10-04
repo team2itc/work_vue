@@ -1,13 +1,17 @@
 <template>
   <div>
-    <div class="cv_header">ข้อมูลกลุ่ม</div>
+    <div class="cv_header">กลุ่มการเรียน</div>
   <v-data-table
       :headers="headers"
-      :items="desserts"
+      :items="group"
       :search="search"
       :pagination.sync="pagination"
-      hide-actions
-      class="elevation-1"
+      :loading=state
+      prev-icon="fas fa-chevron-circle-left"
+      next-icon="fas fa-chevron-circle-right"
+      sort-icon="mdi-menu-down"
+      rows-per-page-text="แสดง"
+      :rows-per-page-items=rows_per_page
     >
     <template slot="headerCell" slot-scope="props">
       <v-tooltip bottom>
@@ -20,13 +24,18 @@
       </v-tooltip>
     </template>
     <template slot="items" slot-scope="props">
-      <td class="text-xs-left">{{ props.item.t_code }}</td>
-      <td class="text-xs-left">{{ props.item.t_name }}</td>
+      <tr v-on:click="list_group(props.item.g_id)">
+        <td class="text-xs-left">{{ props.item.g_code }}</td>
+        <td class="text-xs-left">{{ props.item.d_code }}</td>
+
+      </tr>
     </template>
+     <template slot="no-data">
+        <v-alert :value="true" color="error" icon="warning">
+          ไม่พบข้อมูล :(
+        </v-alert>
+      </template>
   </v-data-table>
-   <div class="text-xs-center pt-2">
-      <v-pagination v-model="pagination.page" :length="pages"></v-pagination>
-    </div>
   </div>
 </template>
 
@@ -35,74 +44,37 @@
     layout: 'manage',
     data () {
       return {
+        state:false,
         search: '',
         pagination: {},
         selected: [],
+        rows_per_page:[10,20,{"text":"แสดงทั้งหมด","value":-1}],//////////////////////////   teach me pleas!
         headers: [
-          { text: 'รหัสกลุ่ม', value: 'รหัสกลุ่ม',align: 'left',sortable: false, },
-          { text: 'ชื่อกลุ่ม', value: 'ชื่อกลุ่ม',align: 'left',sortable: false,  },
+          { text: 'รหัสกลุ่มการเรียน', value: 'รหัสกลุ่มการเรียน',align: 'left',sortable: false, },
+          { text: 'ชื่อแผนก', value: 'ชื่อแผนก',align: 'left',sortable: false,  },
         ],
-        desserts: [
-          {
-            value: false,
-            t_code: '201',
-            t_name: 'A1',
-          
-          },
-           {
-              value: false,
-            t_code: '202',
-            t_name: 'A2',
-          },
-          {
-              value: false,
-            t_code: '203',
-            t_name: 'B1',
-          },
-           {
-              value: false,
-            t_code: '204',
-            t_name: 'B2',
-          },
-           {
-              value: false,
-            t_code: '205',
-            t_name: 'C1',
-          },
-           {
-              value: false,
-            t_code: '206',
-            t_name: 'C2',
-          },
-          {
-              value: false,
-            t_code: '207',
-            t_name: 'D1',
-          },
-           {
-             value: false,
-            t_code: '208',
-            t_name: 'D5',
-          },
-          {
-              value: false,
-            t_code: '209',
-            t_name: 'E1',
-          },
-           {
-              value: false,
-            t_code: '210',
-            t_name: 'E5',
-          },
-     
-        ]
+        group: []
       }
+    },
+    async created(){
+      this.state=true
+      let res=await this.$http.get('/group/list')
+      //  console.log(res.data.group)
+      // this.group=res.data.group
+      console.log(res.data.num)
+      this.state=false
     },
     computed: {
       pages () {
         if (this.pagination.rowsPerPage == null || this.pagination.totalItems == null) return 0
         return Math.ceil(this.pagination.totalItems / this.pagination.rowsPerPage)
       }
+    },
+    methods:{
+      list_group(g_id){
+        this.$router.replace('../manage/group/group_edit?g_id='+g_id)
+      },
+     
     }
   }
 </script>
