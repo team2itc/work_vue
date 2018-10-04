@@ -1,13 +1,17 @@
 <template>
   <div>
-    <div class="cv_header">ข้อมูลแผนก</div>
+    <div class="cv_header">แผนกวิชา</div>
   <v-data-table
       :headers="headers"
-      :items="desserts"
+      :items="department"
       :search="search"
       :pagination.sync="pagination"
-      hide-actions
-      class="elevation-1"
+      :loading=state
+      prev-icon="fas fa-chevron-circle-left"
+      next-icon="fas fa-chevron-circle-right"
+      sort-icon="mdi-menu-down"
+      rows-per-page-text="แสดง"
+      :rows-per-page-items=rows_per_page
     >
     <template slot="headerCell" slot-scope="props">
       <v-tooltip bottom>
@@ -20,14 +24,18 @@
       </v-tooltip>
     </template>
     <template slot="items" slot-scope="props">
-      <td class="text-xs-left">{{ props.item.t_code }}</td>
-      <td class="text-xs-left">{{ props.item.t_name }}</td>
-     
+      <tr v-on:click="list_department(props.item.d_id)">
+        <td class="text-xs-left">{{ props.item.d_code }}</td>
+        <td class="text-xs-left">{{ props.item.d_name }}</td>
+
+      </tr>
     </template>
+     <template slot="no-data">
+        <v-alert :value="true" color="error" icon="warning">
+          ไม่พบข้อมูล :(
+        </v-alert>
+      </template>
   </v-data-table>
-   <div class="text-xs-center pt-2">
-      <v-pagination v-model="pagination.page" :length="pages"></v-pagination>
-    </div>
   </div>
 </template>
 
@@ -36,74 +44,36 @@
     layout: 'manage',
     data () {
       return {
+        state:false,
         search: '',
         pagination: {},
         selected: [],
+        rows_per_page:[10,20,{"text":"แสดงทั้งหมด","value":-1}],//////////////////////////   teach me pleas!
         headers: [
           { text: 'รหัสแผนก', value: 'รหัสแผนก',align: 'left',sortable: false, },
           { text: 'ชื่อแผนก', value: 'ชื่อแผนก',align: 'left',sortable: false,  },
         ],
-        desserts: [
-          {
-            value: false,
-            t_code: '1001',
-            t_name: 'แผนกวิชาคอมพิวเตอร์ธุุรกิจ',
-          
-          },
-           {
-              value: false,
-            t_code: '1002',
-            t_name: 'แผนกวิชาบัญชี',
-          },
-          {
-              value: false,
-            t_code: '1003',
-            t_name: 'แผนกวิชาเทคโนโลยีสารสนเทศ',
-          },
-           {
-              value: false,
-            t_code: '1004',
-            t_name: 'แผนกวิชาช่างยนต์',
-          },
-           {
-              value: false,
-            t_code: '1005',
-            t_name: 'แผนกวิชาไฟฟ้า',
-          },
-           {
-              value: false,
-            t_code: '1006',
-            t_name: 'แผนกวิชาช่างกล',
-          },
-          {
-              value: false,
-            t_code: '1007',
-            t_name: 'แผนกวิชาการขายการตลาด',
-          },
-           {
-             value: false,
-            t_code: '1008',
-            t_name: 'แผนกวิชาโยธา',
-          },
-          {
-              value: false,
-            t_code: '1009',
-            t_name: 'แผนกวิชาสถาปัตยกรรม',
-          },
-           {
-              value: false,
-            t_code: '1010',
-            t_name: 'แผนกวิชาอิเล็กทรอนิกส์',
-          },
-     
-        ]
+        department: []
       }
+    },
+    async created(){
+      this.state=true
+     let res=await this.$http.get('/department/list')
+    //  console.log(res.data.department)
+     this.department=res.data.department
+     this.state=false
     },
     computed: {
       pages () {
         if (this.pagination.rowsPerPage == null || this.pagination.totalItems == null) return 0
         return Math.ceil(this.pagination.totalItems / this.pagination.rowsPerPage)
       }
+    },
+    methods:{
+      list_department(d_id){
+        this.$router.replace('../manage/department/department_edit?d_id='+d_id)
+      },
+     
     }
   }
 </script>

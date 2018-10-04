@@ -6,12 +6,10 @@ module.exports = router
 
 router.get('/list', async (req, res) => {
   try {
-    let rows = await req.db('pk_group').select('*').orderBy("g_code","desc")
-    let num_rows=await req.db("pk_student").count("std_id").innerJoin('pk_group', 'pk_student.g_code', 'pk_group.g_code')
+    let rows = await req.db('pk_department').select('*')
     res.send({
       ok: true,
-      group: rows,
-      num:num_rows,
+      department: rows,
     })
   } catch (e) {
     res.send({ ok: false, error: e.message })
@@ -19,60 +17,60 @@ router.get('/list', async (req, res) => {
 })
 router.get('/cus_select/:select', async (req, res) => {//console.log(req.params.select)
     try {
-      let rows = await req.db('pk_group').select(req.params.select)
+      let rows = await req.db('pk_department').select(req.params.select)
       res.send({
         ok: true,
-        group: rows,
+        department: rows,
       })
     }catch(e){res.send({ ok: false, error: e.message })}
   })
 
-router.get("/sh_group/:g_id",async(req,res)=>{
-  console.log('param='+req.params.g_id)
+router.get("/sh_dep/:d_id",async(req,res)=>{
+  console.log('param='+req.params.d_id)
   try{
     let db = req.db
-    let row = await req.db('pk_group').select('*').where({
-      g_id: req.params.g_id
+    let row = await req.db('pk_department').select('*').where({
+      d_id: req.params.d_id
     })
     res.send({
       ok:true,
-      group: row[0] || {},
+      department: row[0] || {},
     })
   }catch(e){
     res.send({ok:false,error:e.message})
   }
 })
 
-router.post("/group_add",async (req,res)=>{
+router.post("/dep_add",async (req,res)=>{
   try{
-    let g_id=await req.db("pk_group").insert({
-      	g_code:req.body.g_code,
-        d_code:req.body.d_code,
+    let d_id=await req.db("pk_department").insert({
+      	d_code:req.body.d_code,
+        d_name:req.body.d_name,
 
     })
-    res.send({ok:true,txt:"เพิ่มข้อมูล "+req.body.g_code+" สำเร็จ",alt:"success"})
+    res.send({ok:true,txt:"เพิ่มข้อมูล "+req.body.d_name+" สำเร็จ",alt:"success"})
   }catch(e){res.send({ok:false,txt:"ไม่สามารถเพิ่มข้อมูลได้",alt:"error"})}
 })
 
-router.get("/group_del/:g_id",async (req,res)=>{//console.log(req.params.g_id)
+router.get("/dep_del/:d_id",async (req,res)=>{//console.log(req.params.d_id)
   try{
-    let g_id=await req.db("pk_group").del().where({
-      g_id:req.params.g_id
+    let d_id=await req.db("pk_department").del().where({
+      d_id:req.params.d_id
     })
-    res.send({ok:true,txt:"ลบข้อมูล "+req.body.g_id+" สำเร็จ",alt:"success"})
+    res.send({ok:true,txt:"ลบข้อมูล "+req.body.d_id+" สำเร็จ",alt:"success"})
   }catch(e){res.send({ok:false,txt:"ไม่สามารถลบข้อมูลได้",alt:"error"})}
 })
-router.post("/group_update",async(req,res)=>{//console.log(req.body.g_id)
+router.post("/dep_update",async(req,res)=>{//console.log(req.body.d_id)
   try{
-    let sql=await req.db("pk_group").update({
-        g_code:req.body.g_code,
+    let sql=await req.db("pk_department").update({
         d_code:req.body.d_code,
+        d_name:req.body.d_name,
 
     }).where({
-      g_id:req.body.g_id
+      d_id:req.body.d_id
     })
-    res.send({ok:true,txt:"แก้ไขข้อมูล "+req.body.g_code+" สำเร็จ",alt:"success"})
-  }catch(e){res.send({ok:false,txt:"ไม่สามารถแก้ไขข้อมูล "+req.body.g_code+" ได้",alt:"error"})}
+    res.send({ok:true,txt:"แก้ไขข้อมูล "+req.body.d_name+" สำเร็จ",alt:"success"})
+  }catch(e){res.send({ok:false,txt:"ไม่สามารถแก้ไขข้อมูล "+req.body.d_name+" ได้",alt:"error"})}
 })
 
 
