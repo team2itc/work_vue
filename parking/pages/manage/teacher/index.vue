@@ -7,8 +7,11 @@
       :search="search"
       :pagination.sync="pagination"
       :loading=state
-      hide-actions
-      class="elevation-1"
+      prev-icon="fas fa-chevron-circle-left"
+      next-icon="fas fa-chevron-circle-right"
+      sort-icon="mdi-menu-down"
+      rows-per-page-text="แสดง"
+      :rows-per-page-items=rows_per_page
     >
     <template slot="headerCell" slot-scope="props">
       <v-tooltip bottom>
@@ -28,10 +31,12 @@
         <td class="text-xs-left">{{ props.item.t_tel }}</td>
       </tr>
     </template>
+     <template slot="no-data">
+        <v-alert :value="true" color="error" icon="warning">
+          ไม่พบข้อมูล :(
+        </v-alert>
+      </template>
   </v-data-table>
-   <div class="text-xs-center pt-2">
-      <v-pagination v-model="pagination.page" :length="pages"></v-pagination>
-    </div>
   </div>
 </template>
 
@@ -44,6 +49,7 @@
         search: '',
         pagination: {},
         selected: [],
+        rows_per_page:[10,20,{"text":"แสดงทั้งหมด","value":-1}],//////////////////////////   teach me pleas!
         headers: [
           { text: 'รหัสประจำตัวครู / บุคลากร', value: 'รหัสประจำตัวครู / บุคลากร',align: 'left',sortable: false, },
           { text: 'ชื่อ', value: 'ชื่อ',align: 'left',sortable: false,  },
