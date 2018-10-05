@@ -7,11 +7,9 @@ module.exports = router
 router.get('/list', async (req, res) => {
   try {
     let rows = await req.db('pk_group').select('*').orderBy("g_code","desc")
-    let num_rows=await req.db("pk_student").count("std_id").innerJoin('pk_group', 'pk_student.g_code', 'pk_group.g_code')
     res.send({
       ok: true,
-      group: rows,
-      num:num_rows,
+      datas: rows,
     })
   } catch (e) {
     res.send({ ok: false, error: e.message })
@@ -22,7 +20,7 @@ router.get('/cus_select/:select', async (req, res) => {//console.log(req.params.
       let rows = await req.db('pk_group').select(req.params.select)
       res.send({
         ok: true,
-        group: rows,
+        datas: rows,
       })
     }catch(e){res.send({ ok: false, error: e.message })}
   })
@@ -34,9 +32,14 @@ router.get("/sh_group/:g_id",async(req,res)=>{
     let row = await req.db('pk_group').select('*').where({
       g_id: req.params.g_id
     })
+    let num_rows=await req.db("pk_student").count("std_id")
+    .innerJoin('pk_group', 'pk_student.g_code', 'pk_group.g_code')
+    .where("g_id",req.params.g_id)
+    
     res.send({
       ok:true,
-      group: row[0] || {},
+      datas: row[0] || {},
+      nums:num_rows,
     })
   }catch(e){
     res.send({ok:false,error:e.message})
@@ -46,7 +49,8 @@ router.get("/sh_group/:g_id",async(req,res)=>{
 router.post("/group_add",async (req,res)=>{
   try{
     let g_id=await req.db("pk_group").insert({
-      	g_code:req.body.g_code,
+        g_code:req.body.g_code,
+        g_name:req.body.g_name,
         d_code:req.body.d_code,
 
     })
@@ -65,8 +69,9 @@ router.get("/group_del/:g_id",async (req,res)=>{//console.log(req.params.g_id)
 router.post("/group_update",async(req,res)=>{//console.log(req.body.g_id)
   try{
     let sql=await req.db("pk_group").update({
-        g_code:req.body.g_code,
-        d_code:req.body.d_code,
+      g_code:req.body.g_code,
+      g_name:req.body.g_name,
+      d_code:req.body.d_code,
 
     }).where({
       g_id:req.body.g_id

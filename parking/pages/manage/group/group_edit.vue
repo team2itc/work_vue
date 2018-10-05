@@ -82,7 +82,7 @@
           </v-layout>
         </v-container>
         <v-card-actions>
-          <v-btn flat color="green darken-3" @click=""><i class="fas fa-users fa-2x"></i> นักเรียนในกลุ่ม {{nums}} คน</v-btn>
+          <v-btn flat color="green darken-3" @click="student(g_code)"><i class="fas fa-users fa-2x"></i> นักเรียนในกลุ่ม {{nums}} คน</v-btn>
           <v-spacer></v-spacer>
           
           <v-btn flat color="red lighten-2" @click="group()">ย้อนกลับ</v-btn>
@@ -145,6 +145,9 @@
           group(){
             // this.$router.replace("../group")
             this.$router.push({name:"manage-group"})
+          },
+          student(g_code){
+            this.$router.push({path: '../../manage/student/?g_code='+g_code})
           }
         }
     }

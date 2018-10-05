@@ -1,6 +1,10 @@
 <template>
   <div>
     <div class="cv_header">ข้อมูลนักเรียน / นักศึกษา</div>
+    <div class="cv_header xs12">
+      
+    </div>
+    <v-spacer></v-spacer>
   <v-data-table
       :headers="headers"
       :items="std"
@@ -67,10 +71,16 @@
       }
     },
     async created(){
-      let res=await this.$http.get('/student/list')
-      //  console.log(res.data.student)
-      this.std=res.data.datas
-      this.state=false
+      if(this.$route.query.g_code){
+        let res=await this.$http.get('/student/list_g/'+this.$route.query.g_code)
+        this.std=res.data.datas
+        this.state=false
+      }else{
+        let res=await this.$http.get('/student/list')
+        this.std=res.data.datas
+        this.state=false
+      }
+      
       
     },
     computed: {
@@ -84,7 +94,7 @@
     },
     methods:{
       list_student(std_id){
-        this.$router.push({path: '../manage/student/edit_student?std_id='+std_id})
+        this.$router.push({path: '../student/edit_student?std_id='+std_id})
       },
      
     }

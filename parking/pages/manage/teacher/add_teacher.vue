@@ -180,7 +180,7 @@
             }, 500)
           },
           async teaher_add(){
-            if(this.t_code!='' || this.t_name!='' || this.t_dep!='' || this.t_tel!='' ){
+            if(this.t_code!='' && this.t_name!='' && this.t_dep!='' && this.t_tel!='' ){
               let res=await this.$http.post("teacher/teacher_add",{
                 t_code:this.t_code,
                 t_name:this.t_name,
