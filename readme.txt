@@ -3,7 +3,7 @@ Now
 localhost:3000/manage/student
 
 main{
-  pk_department
+  pk_department      // มีปัญหากับข้อมูลจาก mis
   pk_machine
   pk_group
   pk_match_std_tch
