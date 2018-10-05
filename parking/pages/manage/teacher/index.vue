@@ -63,7 +63,7 @@
       this.state=true
      let res=await this.$http.get('/teacher/list')
     //  console.log(res.data.teacher)
-     this.teacher=res.data.teacher
+     this.teacher=res.data.datas
      this.state=false
     },
     computed: {
@@ -74,7 +74,7 @@
     },
     methods:{
       list_teacher(t_id){
-        this.$router.replace('../manage/teacher/edit_teacher?t_id='+t_id)
+        this.$router.push({path: '../manage/teacher/edit_teacher?t_id='+t_id})
       },
      
     }

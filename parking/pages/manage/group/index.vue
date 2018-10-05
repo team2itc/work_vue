@@ -26,6 +26,7 @@
     <template slot="items" slot-scope="props">
       <tr v-on:click="list_group(props.item.g_id)">
         <td class="text-xs-left">{{ props.item.g_code }}</td>
+        <td class="text-xs-left">{{ props.item.g_name }}</td>
         <td class="text-xs-left">{{ props.item.d_code }}</td>
 
       </tr>
@@ -51,7 +52,8 @@
         rows_per_page:[10,20,{"text":"แสดงทั้งหมด","value":-1}],//////////////////////////   teach me pleas!
         headers: [
           { text: 'รหัสกลุ่มการเรียน', value: 'รหัสกลุ่มการเรียน',align: 'left',sortable: false, },
-          { text: 'ชื่อแผนก', value: 'ชื่อแผนก',align: 'left',sortable: false,  },
+          { text: 'ชื่อกลุ่มการเรียน', value: 'ชื่อกลุ่มการเรียน',align: 'left',sortable: false, },
+          { text: 'รหัสแผนก', value: 'รหัสแผนก',align: 'left',sortable: false,  },
         ],
         group: []
       }
@@ -59,9 +61,9 @@
     async created(){
       this.state=true
       let res=await this.$http.get('/group/list')
-      //  console.log(res.data.group)
-      // this.group=res.data.group
-      console.log(res.data.num)
+      //  console.log(res.data.datas)
+      this.group=res.data.datas
+      // console.log("num=".res.data.num)
       this.state=false
     },
     computed: {
@@ -72,7 +74,8 @@
     },
     methods:{
       list_group(g_id){
-        this.$router.replace('../manage/group/group_edit?g_id='+g_id)
+        // this.$router.replace('../manage/group/group_edit?g_id='+g_id)
+        this.$router.push({path: '../manage/group/group_edit?g_id='+g_id})
       },
      
     }

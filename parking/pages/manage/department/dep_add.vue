@@ -78,7 +78,7 @@
             }else{this.danger=true,this.alt_txt="กรุณากรอกข้อมูลให้ครบ",this.type_api="error"}
           },
           department(){
-            this.$router.replace("../department")
+            this.$router.push({name: 'manage-department'})
           }
         }
     }

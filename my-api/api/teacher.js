@@ -8,10 +8,10 @@ router.get('/', async (req,res)=>{
 })
 router.get('/list', async (req, res) => {
   try {
-    let rows = await req.db('pk_teacher').select('*')
+    let rows = await req.db('pk_teacher').select('*').orderBy("t_id","desc")
     res.send({
       ok: true,
-      teacher: rows,
+      datas: rows,
     })
   } catch (e) {
     res.send({ ok: false, error: e.message })
@@ -27,7 +27,7 @@ router.get("/sh_teacher/:t_id",async(req,res)=>{
     })
     res.send({
       ok:true,
-      teacher: row[0] || {},
+      datas: row[0] || {},
     })
   }catch(e){
     res.send({ok:false,error:e.message})

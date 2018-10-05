@@ -182,22 +182,22 @@
             conf_del(){this.conf_del=true},
             async std_del(){console.log("std_del")
               let res=await this.$http.get('/student/std_del/'+this.$route.query.std_id)
-              if(res.data.ok==true){this.$router.replace('../../manage/student')}
+              if(res.data.ok==true){this.$router.push({name:"manage-student"})}
               else{this.danger=true,this.alt_txt=res.data.txt,this.type_api=res.data.alt}
             },
             async sh_std(){
               let res=await this.$http.get('/student/sh_std/'+this.$route.query.std_id)
               this.std_id=this.$route.query.std_id
-              this.std=res.data.student
-              this.std_code=res.data.student.std_code
-              this.std_pin_id=res.data.student.std_pin_id
-              this.std_prename=res.data.student.std_prename
-              this.std_name=res.data.student.std_name
-              this.std_lname=res.data.student.std_lname
-              this.std_birthday=res.data.student.std_birthday
-              this.std_gender=res.data.student.std_gender
-              this.std_blood=res.data.student.std_blood
-              this.g_code=res.data.student.g_code
+              this.std=res.data.datas
+              this.std_code=res.data.datas.std_code
+              this.std_pin_id=res.data.datas.std_pin_id
+              this.std_prename=res.data.datas.std_prename
+              this.std_name=res.data.datas.std_name
+              this.std_lname=res.data.datas.std_lname
+              this.std_birthday=res.data.datas.std_birthday
+              this.std_gender=res.data.datas.std_gender
+              this.std_blood=res.data.datas.std_blood
+              this.g_code=res.data.datas.g_code
             },
             async std_update(std_id){
               //console.log("std_id"+std_id)
@@ -220,7 +220,7 @@
             	 else{this.danger=true,this.alt_txt=res.data.txt,this.type_api=res.data.alt}
             },
             student(){
-              this.$router.replace("../student")
+              this.$router.push({name:"manage-student"})
             }
         }
     }

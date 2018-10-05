@@ -6,10 +6,10 @@ module.exports = router
 
 router.get('/list', async (req, res) => {
   try {
-    let rows = await req.db('pk_department').select('*')
+    let rows = await req.db('pk_department').select('*').orderBy("d_id","desc")
     res.send({
       ok: true,
-      department: rows,
+      datas: rows,
     })
   } catch (e) {
     res.send({ ok: false, error: e.message })
@@ -20,7 +20,7 @@ router.get('/cus_select/:select', async (req, res) => {//console.log(req.params.
       let rows = await req.db('pk_department').select(req.params.select)
       res.send({
         ok: true,
-        department: rows,
+        datas: rows,
       })
     }catch(e){res.send({ ok: false, error: e.message })}
   })
@@ -34,7 +34,7 @@ router.get("/sh_dep/:d_id",async(req,res)=>{
     })
     res.send({
       ok:true,
-      department: row[0] || {},
+      datas: row[0] || {},
     })
   }catch(e){
     res.send({ok:false,error:e.message})

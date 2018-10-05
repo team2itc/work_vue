@@ -8,7 +8,22 @@ router.get('/list', async (req, res) => {
     let rows = await req.db('pk_student').select('*').orderBy("std_code","desc")
     res.send({
       ok: true,
-      student: rows,
+      datas: rows,
+    })
+  } catch (e) {
+    res.send({ ok: false, error: e.message })
+  }
+})
+router.get('/list_g/:g_code', async (req, res) => {
+  try {
+    let rows = await req.db('pk_student').select('*')
+    .where({
+      g_code:req.params.g_code
+    })
+    .orderBy("std_code","desc")
+    res.send({
+      ok: true,
+      datas: rows,
     })
   } catch (e) {
     res.send({ ok: false, error: e.message })
@@ -24,7 +39,7 @@ router.get("/sh_std/:std_id",async(req,res)=>{
     })
     res.send({
       ok:true,
-      student: row[0] || {},
+      datas: row[0] || {},
     })
   }catch(e){
     res.send({ok:false,error:e.message})
