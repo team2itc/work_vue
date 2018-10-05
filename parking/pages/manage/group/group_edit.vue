@@ -82,8 +82,10 @@
           </v-layout>
         </v-container>
         <v-card-actions>
+          <v-btn flat color="green darken-3" @click=""><i class="fas fa-users fa-2x"></i> นักเรียนในกลุ่ม {{nums}} คน</v-btn>
           <v-spacer></v-spacer>
-           <v-btn flat color="red lighten-2" @click="group()">ย้อนกลับ</v-btn>
+          
+          <v-btn flat color="red lighten-2" @click="group()">ย้อนกลับ</v-btn>
           <v-btn flat color="primary" :disabled="!isEditing" @click="group_update(g_id)">บันทึก</v-btn>
         </v-card-actions>
     </v-card>
@@ -99,6 +101,7 @@
             g_name:"",
             d_code: '',
             type_api:"",
+            nums:"",
             danger:false,
             conf_del:false,
             isEditing:null,
@@ -115,7 +118,7 @@
           conf_del(){this.conf_del=true},
           async group_del(){//console.log("group_del")
             let res=await this.$http.get('/group/group_del/'+this.$route.query.g_id)
-            if(res.data.ok==true){this.$router.replace('../../manage/group')}
+            if(res.data.ok==true){this.$router.push({name:"manage-group"})}
             else{this.danger=true,this.alt_txt=res.data.txt,this.type_api=res.data.alt}
           },
           async sh_group(){
@@ -125,6 +128,7 @@
             this.g_code=res.data.datas.g_code
             this.g_name=res.data.datas.g_name
             this.d_code=res.data.datas.d_code
+            this.nums=res.data.nums
           },
           async group_update(g_id){
             //console.log("g_id"+g_id)
