@@ -60,7 +60,7 @@
       this.state=true
      let res=await this.$http.get('/department/list')
     //  console.log(res.data.department)
-     this.department=res.data.department
+     this.department=res.data.datas
      this.state=false
     },
     computed: {
@@ -71,7 +71,8 @@
     },
     methods:{
       list_department(d_id){
-        this.$router.replace('../manage/department/department_edit?d_id='+d_id)
+        this.$router.push({path: '../manage/department/department_edit?d_id='+d_id})
+        // this.$router.replace('../manage/department/department_edit?d_id='+d_id)
       },
      
     }

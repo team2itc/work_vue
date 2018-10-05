@@ -103,8 +103,8 @@
           async sh_dep(){
             let res=await this.$http.get('/department/sh_dep/'+this.$route.query.d_id)
             this.d_id=this.$route.query.d_id
-            this.d_code=res.data.department.d_code
-            this.d_name=res.data.department.d_name
+            this.d_code=res.data.datas.d_code
+            this.d_name=res.data.datas.d_name
           },
           async dep_update(d_id){
             //console.log("d_id"+d_id)
@@ -118,7 +118,7 @@
              else{this.danger=true,this.alt_txt=res.data.txt,this.type_api=res.data.alt}
           },
           department(){
-            this.$router.replace("../department")
+            this.$router.push({name: 'manage-department'})
           }
         }
     }

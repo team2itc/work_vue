@@ -192,7 +192,7 @@
             }else{this.danger=true,this.alt_txt="กรุณากรอกข้อมูลให้ครบ",this.type_api="error"}
           },
           teacher(){
-              this.$router.replace("../teacher")
+              this.$router.push({name:"manage-teacher"})
             }
         }
     }

@@ -180,18 +180,18 @@
             conf_del(){this.conf_del=true},
             async teacher_del(){
               let res=await this.$http.get('/teacher/teacher_del/'+this.$route.query.t_id)
-              if(res.data.ok==true){this.$router.replace('../../manage/teacher')}
+              if(res.data.ok==true){this.$router.push({name:"manage-teacher"})}
               else{this.danger=true,this.alt_txt=res.data.txt,this.type_api=res.data.alt}
             },
             async sh_teacher(){
               let res=await this.$http.get('/teacher/sh_teacher/'+this.$route.query.t_id)
               this.t_id=this.$route.query.t_id
-              this.t_code=res.data.teacher.t_code
-              this.t_name=res.data.teacher.t_name
-              this.t_dep=res.data.teacher.t_dep
-              this.t_tel=res.data.teacher.t_tel
-              this.t_username=res.data.teacher.t_username
-              this.t_password=res.data.teacher.t_password
+              this.t_code=res.data.datas.t_code
+              this.t_name=res.data.datas.t_name
+              this.t_dep=res.data.datas.t_dep
+              this.t_tel=res.data.datas.t_tel
+              this.t_username=res.data.datas.t_username
+              this.t_password=res.data.datas.t_password
             
             },
             async teacher_update(t_id){
@@ -211,7 +211,7 @@
             	 else{this.danger=true,this.alt_txt=res.data.txt,this.type_api=res.data.alt}
             },
             teacher(){
-              this.$router.replace("../teacher")
+              this.$router.push({name:"manage-teacher"})
             }
         }
     }

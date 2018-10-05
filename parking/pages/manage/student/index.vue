@@ -69,7 +69,7 @@
     async created(){
       let res=await this.$http.get('/student/list')
       //  console.log(res.data.student)
-      this.std=res.data.student
+      this.std=res.data.datas
       this.state=false
       
     },
@@ -84,7 +84,7 @@
     },
     methods:{
       list_student(std_id){
-        this.$router.replace('../manage/student/edit_student?std_id='+std_id)
+        this.$router.push({path: '../manage/student/edit_student?std_id='+std_id})
       },
      
     }

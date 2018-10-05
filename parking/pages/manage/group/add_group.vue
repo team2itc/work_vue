@@ -54,6 +54,9 @@
           }
           
         
+        },
+        group(){
+          this.$router.push({name: 'manage-group'})
         }
     }
 </script>
