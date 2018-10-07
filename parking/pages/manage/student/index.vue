@@ -58,6 +58,7 @@
         search: '',
         pagination: {},
         selected: [],
+        part_url:'',
         rows_per_page:[10,20,{"text":"แสดงทั้งหมด","value":-1}],//////////////////////////   teach me pleas!
         headers: [
           {text: 'รหัสนักศึกษา',align: 'left',sortable: false, value: 'name'},
@@ -73,9 +74,11 @@
     async created(){
       if(this.$route.query.g_code){
         let res=await this.$http.get('/student/list_g/'+this.$route.query.g_code)
+        this.part_url="./edit_student?std_id="
         this.std=res.data.datas
         this.state=false
       }else{
+        this.part_url="./student/edit_student?std_id="
         let res=await this.$http.get('/student/list')
         this.std=res.data.datas
         this.state=false
@@ -94,7 +97,7 @@
     },
     methods:{
       list_student(std_id){
-        this.$router.push({path: '../student/edit_student?std_id='+std_id})
+        this.$router.push({path: this.part_url+std_id})
       },
      
     }
