@@ -67,7 +67,7 @@
         },
         methods:{
            async department_add(){
-            if(this.d_code!='' || this.d_name!=''){
+            if(this.d_code!='' && this.d_name!=''){
               let res=await this.$http.post("department/dep_add",{
                 d_code:this.d_code,
                 d_name:this.d_name,

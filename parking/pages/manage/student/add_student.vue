@@ -18,6 +18,8 @@
             <v-flex xs12 >
               <v-layout align-center>
                 <v-text-field
+                  :rules="[rules.required]"
+                  maxlength="10"
                   prepend-icon="fas fa-id-card-alt fa-2x"
                   placeholder="รหัสประจำตัวนักเรียน / นักศึกษา"
                   name="std_code"
@@ -28,6 +30,8 @@
             <v-flex xs12 >
               <v-layout align-center>
                 <v-text-field
+                  :rules="[rules.required]"
+                  maxlength="13"
                   prepend-icon="fas fa-id-card fa-2x"
                   placeholder="รหัสประจำตัวประชาชน"
                   name="std_pin_id"
@@ -37,7 +41,9 @@
             </v-flex>
             <v-flex xs12 >
               <v-layout align-center>
-                <v-text-field
+               <v-text-field
+                  :rules="[rules.required]"
+                  maxlength="10"
                   prepend-icon="fas fa-th"
                   placeholder="รหัสกลุ่มการเรียน"
                   name="g_code"
@@ -53,11 +59,12 @@
                 label="คำนำหน้าชื่อ"
                 hide-details
                 prepend-icon="fas fa-user"
-              
                 ></v-select>
             </v-flex>
             <v-flex xs4 >
                 <v-text-field
+                  :rules="[rules.required]"
+                  maxlength="50"
                   prepend-icon=""
                   placeholder="ชื่อ"
                   name="std_name"
@@ -66,6 +73,8 @@
             </v-flex>
             <v-flex xs4 >
                 <v-text-field
+                  :rules="[rules.required]"
+                  maxlength="50"
                   prepend-icon=""
                   placeholder="นามสกุล"
                   name="std_lname"
@@ -73,25 +82,44 @@
                 ></v-text-field>
             </v-flex>
            <v-flex xs12>
-              <v-text-field
+
+             <v-dialog
+                    ref="modal"
+                    v-model="modal"
+                    :return-value.sync="std_birthday"
+                    persistent
+                    lazy
+                    full-width
+                    width="290px"
+                  >
+
+                <v-text-field
+                  slot="activator"
+                  v-model="std_birthday"
+                  label="Birthday date"
+                  prepend-icon="fas fa-birthday-cake"
+                  readonly
+                ></v-text-field>
+                <v-date-picker
+                  locale="th"             
+                  ref="picker"
+                  v-model="std_birthday"
+                  :max="new Date().toISOString().substr(0, 10)"
+                  min="1950-01-01"
+
+                >
+                      <v-spacer></v-spacer>
+                      <v-btn flat color="primary" @click="modal = false">Cancel</v-btn>
+                      <v-btn flat color="primary" @click="$refs.modal.save(std_birthday)">OK</v-btn></v-date-picker>
+              </v-dialog>
+
+              <!-- <v-text-field
                 prepend-icon="fas fa-birthday-cake"
                 placeholder="วัน เดือน ปี เกิด เช่น 8 พฤษภาคม 2540"
                 name="std_birthday"
                 v-model="std_birthday"
-                ></v-text-field>
+                ></v-text-field> -->
             </v-flex>
-            
-            <!-- <v-flex xs6>
-              <v-select
-                :items="gd"
-                v-model="std_gender"
-                menu-props="auto"
-                hide-details
-                label="เพศ"
-                prepend-icon="fas fa-transgender"
-              
-              ></v-select>
-            </v-flex> -->
             <v-flex xs6>
               <v-select
                 :items="bld"
@@ -135,17 +163,27 @@
             type_api:"",
             danger:false,
             alt_txt:"",
+            item_group:[],
             bld:['A', 'B', 'O','AB' ],
-            // gd:[{text:'ชาย',value:"ช"},{text:'หญิง',value:"ญ"}],
             item_pre_name:['นาย','นางสาว','นาง',],
+            rules: {
+                  required: value => !!value || 'ห้ามว่าง.',
+                  // counter: value => value.length <= 10 || 'เต็ม 10 ตัวอักษร',
+            },
+            date: null,
+            modal: false,
 
           }
-          
-        
+        },
+        async created(){
+          this.sh_group()
         },
         watch:{
           std_prename(newValue){
             if(newValue=="นาย"){this.std_gender="ช"}else{this.std_gender="ญ"}
+          },
+          modal (val) {
+            val && this.$nextTick(() => (this.$refs.picker.activePicker = 'YEAR'))
           },
         },
         methods:{
@@ -169,9 +207,15 @@
             if(res.data.ok==true){this.danger=true,this.alt_txt=res.data.txt,this.type_api=res.data.alt}
             else{this.danger=true,this.alt_txt=res.data.txt,this.type_api=res.data.alt}
           },
+          async sh_group(){
+            let res=await this.$http.get('/group/list/')
+            // this.item_group=res.data.datas.g_id  
+            // console.log(res.data.datas.g_id)
+            // console.log("item_group="+this.item_group.g_code)
+          },
           student(){
             this.$router.push({name:"manage-student"})
-          }
+          },
         },
 
     }

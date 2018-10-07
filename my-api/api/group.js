@@ -20,7 +20,7 @@ router.get('/cus_select/:select', async (req, res) => {//console.log(req.params.
       let rows = await req.db('pk_group').select(req.params.select)
       res.send({
         ok: true,
-        datas: rows,
+        datas: rows || {},
       })
     }catch(e){res.send({ ok: false, error: e.message })}
   })
