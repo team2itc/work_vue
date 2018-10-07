@@ -4,7 +4,7 @@ localhost:3000/manage/student
 
 main{
   pk_department      // มีปัญหากับข้อมูลจาก mis
-  pk_machine
+  pk_machine         // ok
   pk_group           // ok
   pk_match_std_tch
   pk_teacher         // filter group
