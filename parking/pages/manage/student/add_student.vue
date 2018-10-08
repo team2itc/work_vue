@@ -20,6 +20,7 @@
                 <v-text-field
                   :rules="[rules.required]"
                   maxlength="10"
+                  counter
                   prepend-icon="fas fa-id-card-alt fa-2x"
                   placeholder="รหัสประจำตัวนักเรียน / นักศึกษา"
                   name="std_code"
@@ -32,6 +33,7 @@
                 <v-text-field
                   :rules="[rules.required]"
                   maxlength="13"
+                  counter
                   prepend-icon="fas fa-id-card fa-2x"
                   placeholder="รหัสประจำตัวประชาชน"
                   name="std_pin_id"
@@ -44,6 +46,7 @@
                <v-text-field
                   :rules="[rules.required]"
                   maxlength="10"
+                  counter
                   prepend-icon="fas fa-th"
                   placeholder="รหัสกลุ่มการเรียน"
                   name="g_code"
@@ -65,6 +68,7 @@
                 <v-text-field
                   :rules="[rules.required]"
                   maxlength="50"
+                  counter
                   prepend-icon=""
                   placeholder="ชื่อ"
                   name="std_name"
@@ -75,6 +79,7 @@
                 <v-text-field
                   :rules="[rules.required]"
                   maxlength="50"
+                  counter
                   prepend-icon=""
                   placeholder="นามสกุล"
                   name="std_lname"
@@ -95,10 +100,12 @@
 
                 <v-text-field
                   slot="activator"
-                  v-model="std_birthday"
-                  label="Birthday date"
+                  v-model="dateFormatted"
+                  label="วัน/เดือน/ปีเกิด"
                   prepend-icon="fas fa-birthday-cake"
-                  readonly
+                  @blur="date = parseDate(dateFormatted)"
+                  hint="วัน/เดือน/ปีเกิด"
+                  persistent-hint
                 ></v-text-field>
                 <v-date-picker
                   locale="th"             
@@ -106,7 +113,6 @@
                   v-model="std_birthday"
                   :max="new Date().toISOString().substr(0, 10)"
                   min="1950-01-01"
-
                 >
                       <v-spacer></v-spacer>
                       <v-btn flat color="primary" @click="modal = false">Cancel</v-btn>
@@ -118,18 +124,7 @@
                 placeholder="วัน เดือน ปี เกิด เช่น 8 พฤษภาคม 2540"
                 name="std_birthday"
                 v-model="std_birthday"
-                ></v-text-field> -->
-            </v-flex>
-            <v-flex xs6>
-              <v-select
-                :items="bld"
-                v-model="std_blood"
-                menu-props="auto"
-                hide-details
-                label="กรุ๊ปเลือด"
-                prepend-icon="fas fa-hospital"
-              
-              ></v-select>
+                ></v-text-field>-->
             </v-flex>
            
           </v-layout>
@@ -170,8 +165,10 @@
                   required: value => !!value || 'ห้ามว่าง.',
                   // counter: value => value.length <= 10 || 'เต็ม 10 ตัวอักษร',
             },
-            date: null,
             modal: false,
+            date: null,
+          dateFormatted: null,
+          menu1: false,
 
           }
         },
@@ -182,6 +179,9 @@
           std_prename(newValue){
             if(newValue=="นาย"){this.std_gender="ช"}else{this.std_gender="ญ"}
           },
+           std_birthday (val) {
+      this.dateFormatted = this.formatDate(this.std_birthday)
+    },
           modal (val) {
             val && this.$nextTick(() => (this.$refs.picker.activePicker = 'YEAR'))
           },
@@ -195,14 +195,9 @@
               std_name:this.std_name,
               std_lname:this.std_lname,
               std_pin_id:this.std_pin_id,
-              std_birthday:this.std_birthday,
+              std_birthday:this.dateFormatted,
               std_blood:this.std_blood,
               g_code:this.g_code,
-              rules: {
-                required: value => !!value || 'ห้ามว่าง.',
-                counter_10: value => value.length <= 10 || 'เต็ม 10 ตัวอักษร',
-                counter_13: value => value.length <= 10 || 'เต็ม 10 ตัวอักษร',
-              }
             })
             if(res.data.ok==true){this.danger=true,this.alt_txt=res.data.txt,this.type_api=res.data.alt}
             else{this.danger=true,this.alt_txt=res.data.txt,this.type_api=res.data.alt}
@@ -213,10 +208,28 @@
             // console.log(res.data.datas.g_id)
             // console.log("item_group="+this.item_group.g_code)
           },
-          student(){
+    student(){
             this.$router.push({name:"manage-student"})
           },
+    formatDate (std_birthday) {
+      if (!std_birthday) return null
+
+      const [year, month, day] = std_birthday.split('-')
+      return `${day}/${month}/${year}`
+    },
+    parseDate (std_birthday) {
+      if (!std_birthday) return null
+
+      const [month, day, year] = std_birthday.split('/')
+      return `${year}-${month.padStart(2, '0')}-${day.padStart(2, '0')}`
+    }
         },
+    computed: {
+    computedDateFormatted () {
+      return this.formatDate(this.std_birthday)
+    }
+  },
 
     }
+    
 </script>
