@@ -57,34 +57,46 @@
 
         data () {
             return {
-            std_code:"6039010001",
-            pin_id:"1234567890987",
-            pre_name:"",
-            std_name:"นักเรียน",
-            std_lname:"คนนึง",
-            std_birthday:"8 พฤษภาคม 2540",
-            blood: '',
-            gender:'',
-            bld:[
-              'A', 'B', 'O','AB' 
-            ],
-            gd:['ชาย','หญิง'],
-            item_pre_name:['นาย','นางสาว','นาง',],
-            stg_password: false,
-            stg_password2: false,
-            password:"",
-            conf_pass:"",
-            rules: {
-              required: value => !!value || 'ห้ามว่าง.',
-              min: v => v.length >= 8 || 'Password ไม่ควรน้อยกว่า 8 ตัวอักษร',
-              emailMatch: () => ('The email and password you entered don\'t match'),
+              t_username:sessionStorage.getItem("username"),
+              t_password:sessionStorage.getItem("password"),
+              std_code:"6039010001",
+              pin_id:"1234567890987",
+              pre_name:"",
+              std_name:"นักเรียน",
+              std_lname:"คนนึง",
+              std_birthday:"8 พฤษภาคม 2540",
+              blood: '',
+              gender:'',
+              bld:[
+                'A', 'B', 'O','AB' 
+              ],
+              gd:['ชาย','หญิง'],
+              item_pre_name:['นาย','นางสาว','นาง',],
+              stg_password: false,
+              stg_password2: false,
+              password:"",
+              conf_pass:"",
+              rules: {
+                required: value => !!value || 'ห้ามว่าง.',
+                min: v => v.length >= 8 || 'Password ไม่ควรน้อยกว่า 8 ตัวอักษร',
+                emailMatch: () => ('The email and password you entered don\'t match'),
 
-            },
-          }
-          
-          
-        
+              },
+            }
         },
+        async created(){
+          this.select_id()
+        },
+        methods:{
+            async select_id(){
+              let res=await this.$http.post("/teacher/select_id",{
+                t_username:this.t_username,
+                t_password:this.t_password
+              })
+              console.log(res.data)
+            
+            },
+        }
         
     }
 </script>
