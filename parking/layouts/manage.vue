@@ -199,7 +199,7 @@
     },
     beforeCreate() {
     if (!sessionStorage.getItem("username")|| !sessionStorage.getItem("password") || !sessionStorage.getItem("status")
-    && sessionStorage.getItem("status")!="tch" || sessionStorage.getItem("status")!="bld") {
+    ){
       this.$router.push({path: 'manage'})
     }
   },
