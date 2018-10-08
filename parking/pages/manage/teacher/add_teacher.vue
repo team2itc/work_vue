@@ -142,7 +142,9 @@
               sh_gro1: null,
               sh_gro2: null,
               sh_gro3: null,
-              group: [],
+              group: [
+              
+              ],
               rules: {
                 required: value => !!value || 'ห้ามว่าง.',
                 // counter: value => value.length <= 10 || 'เต็ม 10 ตัวอักษร',
@@ -164,8 +166,8 @@
         },
         async created(){
           let res=await this.$http.get('/group/cus_select/g_code')
-          // console.log(res.data.group)
-          this.group=res.data.group
+          // console.log(res.data.datas)
+          this.group=res.data.datas
       
         },
         methods: {
