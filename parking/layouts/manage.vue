@@ -65,7 +65,7 @@
               </v-list-tile-title>
             </v-list-tile-content>
           </v-list-tile>
-          
+
         </template>
       </v-list>
        <v-divider></v-divider>
@@ -190,21 +190,25 @@
             { icon:'fas fa-sliders-h' ,text: 'ระบบ' },
           ]},
         { icon: 'help', text: 'ช่วยเหลือ' },
-        { icon: 'fas fa-sign-out-alt', text: 'ออกจากระบบ' },
+        { icon: 'fas fa-sign-out-alt', text: 'ออกจากระบบ' ,link:"../logout"},
         
       ]
     }),
     props: {
       source: String
     },
+    beforeCreate() {
+    if (!sessionStorage.getItem("username")|| !sessionStorage.getItem("password") || !sessionStorage.getItem("status")
+    && sessionStorage.getItem("status")!="tch" || sessionStorage.getItem("status")!="bld") {
+      this.$router.push({path: 'manage'})
+    }
+  },
    
-   /*methods: {
-      students(){
-        this.$router.replace('/student')
-      },
-      teacher(){
-        this.$router.replace('/teacher')
-      }
-    }*/
+   methods: {
+     logout() {
+      sessionStorage.removeItem('itemName');
+       this.$router.push({path: 'manage'})
+    }
+    }
   }
 </script>
