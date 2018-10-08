@@ -32,6 +32,8 @@
               <v-layout align-center>
                 <v-text-field 
                   :rules="[rules.required]"
+                  maxlength="50"
+                  counter
                   prepend-icon="fas fa-user fa-2x"
                   placeholder="ชื่อ นามสกุล"
                   name="t_name"
@@ -43,6 +45,8 @@
               <v-layout align-center>
                 <v-text-field 
                   :rules="[rules.required]"
+                  maxlength="100"
+                  counter
                   prepend-icon="fas fa-archway fa-2x"
                   placeholder="แผนกวิชา"
                   name="t_dep"
