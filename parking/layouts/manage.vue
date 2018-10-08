@@ -190,7 +190,7 @@
             { icon:'fas fa-sliders-h' ,text: 'ระบบ' },
           ]},
         { icon: 'help', text: 'ช่วยเหลือ' },
-        { icon: 'fas fa-sign-out-alt', text: 'ออกจากระบบ' ,link:"../logout"},
+        { icon: 'fas fa-sign-out-alt', text: 'ออกจากระบบ' ,link:"../../logout"},
         
       ]
     }),
