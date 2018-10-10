@@ -42,14 +42,21 @@ router.get("/sh_dep/:d_id",async(req,res)=>{
 })
 
 router.post("/dep_add",async (req,res)=>{
-  try{
-    let d_id=await req.db("pk_department").insert({
-      	d_code:req.body.d_code,
-        d_name:req.body.d_name,
+  // try{
+  //   let d_id=await req.db("pk_department").insert({
+  //     	d_code:req.body.d_code,
+  //       d_name:req.body.d_name,
 
-    })
-    res.send({ok:true,txt:"เพิ่มข้อมูล "+req.body.d_name+" สำเร็จ",alt:"success"})
-  }catch(e){res.send({ok:false,txt:"ไม่สามารถเพิ่มข้อมูลได้",alt:"error"})}
+  //   })
+  //   res.send({ok:true,txt:"เพิ่มข้อมูล "+req.body.d_name+" สำเร็จ",alt:"success"})
+  // }catch(e){res.send({ok:false,txt:"ไม่สามารถเพิ่มข้อมูลได้",alt:"error"})}
+  // 
+  // // let res=await req.db("pk_department_log").insert({
+  // //   d_id:d_id,
+  // //   d_code:req.body.d_code,
+  // //   d_name:req.body.d_name,
+  // //   u_id:
+  // // })
 })
 
 router.get("/dep_del/:d_id",async (req,res)=>{//console.log(req.params.d_id)

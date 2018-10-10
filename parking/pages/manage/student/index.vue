@@ -79,7 +79,7 @@
         this.state=false
       }else{
         this.part_url="./student/edit_student?std_id="
-        let res=await this.$http.get('/student/list2')
+        let res=await this.$http.get('/student/list')
         this.std=res.data.datas
         this.state=false
       }
