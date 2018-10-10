@@ -195,17 +195,20 @@
         { icon: 'help', text: 'ช่วยเหลือ' },
         { icon: 'fas fa-sign-out-alt', text: 'ออกจากระบบ' ,link:"../../logout"},
         
-      ]
+      ],
+      id:"",
     }),
     props: {
       source: String
     },
     created(){
-       
+       this.set_session()
     },
     beforeCreate() {
       if (!sessionStorage.getItem("username")|| !sessionStorage.getItem("password") || !sessionStorage.getItem("status")){
         this.$router.push({path: '/'})
+      }else{
+
       }
       // if(sessionStorage.getItem("status")!="tch" || sessionStorage.getItem("status")!="bld" ){
       //   this.$router.push({path: '/'})
@@ -218,6 +221,11 @@
     }
   },
    methods: {
+     set_session(){
+       this.id=sessionStorage.getItem("id")
+       console.log("id="+this.id)
+       console.log("status="+sessionStorage.getItem("status"))
+     },
      logout() {
       sessionStorage.removeItem('itemName');
        this.$router.push({path: 'manage'})
