@@ -85,6 +85,7 @@
         flat
         solo-inverted
         hide-details
+        v-model="txt_search"
         prepend-inner-icon="search"
         label="ค้นหา ..."
         class="hidden-sm-and-down"
@@ -149,6 +150,8 @@
 <script>
   export default {
     data: () => ({
+      txt_search:"",
+      page_search:"",
       noti_sh:true,
       num_noti:'10',
       dialog: false,
@@ -197,18 +200,31 @@
     props: {
       source: String
     },
+    created(){
+       
+    },
     beforeCreate() {
-    if (!sessionStorage.getItem("username")|| !sessionStorage.getItem("password") || !sessionStorage.getItem("status")
-    ){
-      this.$router.push({path: 'manage'})
+      if (!sessionStorage.getItem("username")|| !sessionStorage.getItem("password") || !sessionStorage.getItem("status")){
+        this.$router.push({path: '/'})
+      }
+      // if(sessionStorage.getItem("status")!="tch" || sessionStorage.getItem("status")!="bld" ){
+      //   this.$router.push({path: '/'})
+      // }
+  },
+  watch:{
+    txt_search(val){
+      this.search()
+      console.log("page_search="+this.page_search)
     }
   },
-   
    methods: {
      logout() {
       sessionStorage.removeItem('itemName');
        this.$router.push({path: 'manage'})
-    }
+    },
+      search(){
+        console.log("txt_search="+this.txt_search)
+      }
     }
   }
 </script>
